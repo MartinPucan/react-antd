@@ -9,7 +9,7 @@ How to deploy project to github pages
 ```
 > install github pages
 ```
-npm install —save gh-pages
+npm install --save gh-pages
 ```
 > Setup deploy script - add to package.json ```"predeploy"``` and ```"deploy"```
 - Make sure that you write the predeploy script first
