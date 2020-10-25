@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from 'antd/es/table';
 import Avatar from 'antd/es/avatar';
 import Divider from 'antd/es/divider';
@@ -20,21 +20,25 @@ export default function User() {
 		fetchUsers();
 	}, [])
 
-
-	const columns = [{
+	const columns = [
+	{
 		title: 'Avatar',
 		dataIndex: 'avatar',
 		render: url => <Avatar size="small" src={url} />,
-	}, {
+	},
+	{
 		title: 'Email',
 		dataIndex: 'email',
-	}, {
+	},
+	{
 		title: 'First name',
 		dataIndex: 'first_name',
-	}, {
+	},
+	{
 		title: 'Last name',
 		dataIndex: 'last_name',
-	}, {
+	},
+	{
 		title: 'Actions',
 		key: 'actions',
 		render: () => (
