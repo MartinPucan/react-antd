@@ -1,5 +1,6 @@
 import React from 'react';
 import User from './components/User';
+import LoginUser from './components/LoginUser';
 // import AddUser from './components/AddUser';
 // import Button from 'antd/es/button';
 import 'antd/dist/antd.css';
@@ -18,6 +19,7 @@ const App = () => {
 			{/*</AddUser>*/}
 
 			<User />
+			{/*<LoginUser />*/}
 		</div>
 	);
 };

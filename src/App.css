@@ -9,3 +9,15 @@
   text-align: center;
   font-size: 1.5em;
 }
+
+.login-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: .5em;
+  text-align: center;
+}
+
+.error {
+  background: darkred;
+  color: white;
+}
