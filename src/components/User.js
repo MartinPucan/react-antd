@@ -1,59 +1,61 @@
-// import React, { useState } from 'react';
-// import { Table, Divider } from 'antd';
-// import 'antd/dist/antd.css';
-// import './App.css';
-//
-// const User = () => {
-//
-// 	const columns = [{
-// 		title: 'Name',
-// 		dataIndex: 'name',
-// 		key: 'name',
-// 		render: text => <a href="#">{text}</a>,
-// 	}, {
-// 		title: 'Age',
-// 		dataIndex: 'age',
-// 		key: 'age',
-// 	}, {
-// 		title: 'Address',
-// 		dataIndex: 'address',
-// 		key: 'address',
-// 	}, {
-// 		title: 'Action',
-// 		key: 'action',
-// 		render: (text, record) => (
-// 			<span>
-//       <a href="#">Action 一 {record.name}</a>
-//       <Divider type="vertical" />
-//       <a href="#">Delete</a>
-//       <Divider type="vertical" />
-//     </span>
-// 		),
-// 	}];
-//
-// 	const data = [{
-// 		key: '1',
-// 		name: 'John Brown',
-// 		age: 32,
-// 		address: 'New York No. 1 Lake Park',
-// 	}, {
-// 		key: '2',
-// 		name: 'Jim Green',
-// 		age: 42,
-// 		address: 'London No. 1 Lake Park',
-// 	}, {
-// 		key: '3',
-// 		name: 'Joe Black',
-// 		age: 32,
-// 		address: 'Sidney No. 1 Lake Park',
-// 	}];
-//
-//
-// 	return (
-// 		// <div className="container">
-// 		// 	<Table columns={columns} dataSource={data} bordered title{() => 'User'} />
-// 		// </div>
-// 	);
-// };
-//
-// export default User;
+import React, {useEffect, useState} from 'react';
+import Table from 'antd/es/table';
+import Avatar from 'antd/es/avatar';
+import Divider from 'antd/es/divider';
+import Button from 'antd/es/button';
+import 'antd/dist/antd.css';
+
+export default function User() {
+	const [ users, setUsers ] = useState([]);
+
+	useEffect(() => {
+		async function fetchUsers() {
+			try {
+				const response = await fetch(`https://reqres.in/api/users?page=2`);
+				const json = await response.json();
+				setUsers(json.data);
+			}
+				catch(error) {}
+		}
+		fetchUsers();
+	}, [])
+
+
+	const columns = [{
+		title: 'Avatar',
+		dataIndex: 'avatar',
+		render: url => <Avatar size="small" src={url} />,
+	}, {
+		title: 'Email',
+		dataIndex: 'email',
+	}, {
+		title: 'First name',
+		dataIndex: 'first_name',
+	}, {
+		title: 'Last name',
+		dataIndex: 'last_name',
+	}, {
+		title: 'Actions',
+		key: 'actions',
+		render: () => (
+			<span>
+				<Button size="small">Edit</Button>
+				<Divider type="vertical" />
+				<Button type="danger" size="small">Delete</Button>
+    	</span>
+		),
+	}];
+
+	return (
+		<div className="container">
+			<Table
+				columns={columns}
+				dataSource={users}
+				title={() => 'Users'}
+				pagination={{ pageSize: 10 }}
+				rowKey="id"
+				bordered
+			/>
+		</div>
+	);
+};
