@@ -1,6 +1,26 @@
-# Getting Started with Create React App
+# React && Ant design
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Deploy
+How to deploy project to github pages
+
+> Add to package.json under the ```"private"``` property ```"homepage"```
+```
+"homepage": "https://user-name.github.io/project-name"
+```
+> install github pages
+```
+npm install —save gh-pages
+```
+> Setup deploy script - add to package.json ```"predeploy"``` and ```"deploy"```
+- Make sure that you write the predeploy script first
+```
+"predeploy": "npm run build"
+"deploy": "gh-pages -d build"
+```
+> The last thing what have to do
+```
+npm run deploy
+```
 
 ## Available Scripts
 
