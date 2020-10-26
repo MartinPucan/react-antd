@@ -4,8 +4,7 @@ import Modal from 'antd/es/modal';
 const AddUser = () => {
 
 	return (
-		<Modal
-		/>
+		<Modal />
 	)
 }
 
