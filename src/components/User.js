@@ -3,7 +3,6 @@ import Table from 'antd/es/table';
 import Avatar from 'antd/es/avatar';
 import Divider from 'antd/es/divider';
 import Button from 'antd/es/button';
-import 'antd/dist/antd.css';
 
 export default function User() {
 	const [ users, setUsers ] = useState([]);
