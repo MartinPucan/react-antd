@@ -22,6 +22,8 @@ npm install --save gh-pages
 npm run deploy
 ```
 
+Make sure your branch on gh-pages is set up correctly, you can configure it in the project settings
+
 ## Available Scripts
 
 In the project directory, you can run:
