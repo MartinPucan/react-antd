@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import Modal from 'antd/es/modal';
 import Table from 'antd/es/table';
 import Avatar from 'antd/es/avatar';
 import Divider from 'antd/es/divider';
 import Button from 'antd/es/button';
 
-export default function User() {
+export default function UserService() {
 	const [ users, setUsers ] = useState([]);
-	const [ editing, setEditing ] = useState(false);
 
 	const fetchUsers = async () => {
 		try {
 			const response = await fetch(`https://reqres.in/api/users?page=2`);
-			const json = await response.json();
-			setUsers(json.data);
+			const { data} = await response.json();
+			setUsers(data);
 		}
 		catch(error) {
 			console.log(error)
@@ -25,6 +25,25 @@ export default function User() {
 
 	const deleteUser = id => {
 		setUsers(users.filter(user => id !== user.id));
+	}
+
+	const editUser = id => {
+		const userById = users.find(user => id === user.id);
+		console.log(userById);
+	}
+
+	const detailUser = id => {
+		const userById = users.find(user => id === user.id);
+		Modal.info({
+			title: `${userById.first_name} ${userById.last_name}`,
+			content: (
+				<div>
+					<p><strong>Id:</strong> {userById.id}</p>
+					<p><strong>Email:</strong> {userById.email}</p>
+				</div>
+			),
+			onOk() {},
+		});
 	}
 
 	const columns = [
@@ -49,7 +68,13 @@ export default function User() {
 		title: 'Actions',
 		render: (record) => (
 			<span>
-				<Button size="small">Edit</Button>
+				<Button size="small" onClick={() => detailUser(record.id) }>
+					Detail
+				</Button>
+				<Divider type="vertical" />
+				<Button size="small" onClick={() => editUser(record.id)}>
+					Edit
+				</Button>
 				<Divider type="vertical" />
 				<Button type="danger" size="small" onClick={() => deleteUser(record.id)}>
 					Delete
