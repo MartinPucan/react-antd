@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import EditUser from './EditUser';
 import Modal from 'antd/es/modal';
 import Table from 'antd/es/table';
 import Avatar from 'antd/es/avatar';
@@ -7,11 +8,13 @@ import Button from 'antd/es/button';
 
 export default function UserService() {
 	const [ users, setUsers ] = useState([]);
+	const [ currentUser, setCurrentUser ] = useState([]);
+	const [ editing, setEditing ] = useState(false);
 
 	const fetchUsers = async () => {
 		try {
 			const response = await fetch(`https://reqres.in/api/users?page=2`);
-			const { data} = await response.json();
+			const { data } = await response.json();
 			setUsers(data);
 		}
 		catch(error) {
@@ -24,25 +27,40 @@ export default function UserService() {
 	}, [])
 
 	const deleteUser = id => {
+		setEditing(false);
 		setUsers(users.filter(user => id !== user.id));
 	}
 
-	const editUser = id => {
-		const userById = users.find(user => id === user.id);
-		console.log(userById);
-	}
-
 	const detailUser = id => {
+		setEditing(false);
 		const userById = users.find(user => id === user.id);
 		Modal.info({
 			title: `${userById.first_name} ${userById.last_name}`,
 			content: (
-				<div>
+				<section>
 					<p><strong>Id:</strong> {userById.id}</p>
 					<p><strong>Email:</strong> {userById.email}</p>
-				</div>
+				</section>
 			),
 			onOk() {},
+		});
+	}
+
+	const updateUser = (id, updatedUser) => {
+		setEditing(false);
+		setUsers( users.map( user => (
+			user.id === id ? updatedUser : user)
+		));
+	}
+
+	const editRow = user => {
+		setEditing(true);
+		setCurrentUser({
+			id: user.id,
+			email: user.email,
+			first_name: user.first_name,
+			last_name: user.last_name,
+			avatar: user.avatar
 		});
 	}
 
@@ -72,7 +90,7 @@ export default function UserService() {
 					Detail
 				</Button>
 				<Divider type="vertical" />
-				<Button size="small" onClick={() => editUser(record.id)}>
+				<Button size="small" onClick={() => editRow(record)}>
 					Edit
 				</Button>
 				<Divider type="vertical" />
@@ -84,6 +102,7 @@ export default function UserService() {
 	}];
 
 	return (
+		<>
 		<Table
 			columns={columns}
 			rowKey="id"
@@ -92,5 +111,18 @@ export default function UserService() {
 			pagination={{ pageSize: 10 }}
 			bordered
 		/>
+		<div>
+			{editing ? (
+				<>
+					<EditUser
+						editing={editing}
+						setEditing={setEditing}
+						currentUser={currentUser}
+						updateUser={updateUser}
+					/>
+				</>
+			) : <></> }
+		</div>
+		</>
 	);
 };

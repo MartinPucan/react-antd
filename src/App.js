@@ -3,7 +3,7 @@ import UserService from './components/UserService';
 import Layout from 'antd/es/layout';
 import 'antd/dist/antd.css';
 import './App.css';
-// import LoginUser from "./components/LoginUser";
+import LoginUser from "./components/LoginUser";
 
 const App = () => {
 
@@ -11,7 +11,7 @@ const App = () => {
 		<Layout>
 			<div className="container">
 				<UserService />
-				{/*<LoginUser />*/}
+				<LoginUser />
 			</div>
 		</Layout>
 	);
