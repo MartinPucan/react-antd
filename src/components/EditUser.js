@@ -1,63 +1,91 @@
-import React, { useState, useEffect } from 'react';
-// import Form from 'antd/es/form';
-// import Input from 'antd/es/input';
-// import Button from 'antd/es/button';
+import React, {useCallback, useState} from 'react';
+import PropTypes from 'prop-types';
+import { useUpdateUser } from './UserService';
+import Modal from 'antd/es/modal';
+import Form from 'antd/es/form';
+import Input from 'antd/es/input';
+import { useForm } from 'antd/es/form/Form';
 
-const EditUser = props => {
-	const [ user, setUser ] = useState(props.currentUser)
+const EditUser = ({ children, user, users, setUsers }) => {
+	const { updateUser } = useUpdateUser(users, setUsers);
 
-	useEffect(() => {
-			setUser(props.currentUser);
-		},[ props ]
-	);
+	const [open, setOpen] = useState(false);
+	const [form] = useForm();
 
-	const onSubmit = e => {
-		e.preventDefault()
-		props.updateUser(user.id, user)
-	}
+	const onSubmit = useCallback( () => {
+		try {
+			updateUser(user.id);
+			setOpen(false);
+		} catch (error) {
+			console.log(error)
+		}
+	}, [form, updateUser, user, setOpen]);
 
-	const handleInputChange = e => {
-		const { name, value } = e.target
-		setUser({ ...user, [name]: value });
-	}
+	const onClick = useCallback(() => {
+		if (user !== null) {
+			form.setFieldsValue(user);
+		}
+		setOpen(true);
+	}, [form, user, setOpen]);
 
 	return (
-		<form onSubmit={onSubmit} className="form-container">
-			<div className="inputs">
-				<input type="email" name="email" value={user.email} onChange={handleInputChange} />
-				<input type="text" name="first_name" value={user.first_name} onChange={handleInputChange} />
-				<input type="text" name="last_name" value={user.last_name} onChange={handleInputChange} />
-			</div>
-			<div className="submit">
-				<button onClick={() => props.setEditing(false)}>Cancel</button>
-				<button>Update user</button>
-			</div>
-		</form>
+		<>
+			{React.cloneElement(children, {
+				onClick: onClick,
+			})}
+			<Modal
+				visible={open}
+				onCancel={() => setOpen(false) }
+				onOk={onSubmit}
+			>
+				<Form form={form}>
+					<Form.Item
+						label="First name"
+						name="first_name"
+						rules={[
+							{
+								required: true,
+								message: 'First name is required',
+							},
+						]}
+					>
+						<Input />
+					</Form.Item>
+					<Form.Item
+						label="Last name"
+						name="last_name"
+						rules={[
+							{
+								required: true,
+								message: 'Last name is required',
+							},
+						]}
+					>
+						<Input />
+					</Form.Item>
+					<Form.Item
+						label="Email"
+						name="email"
+						rules={[
+							{
+								required: true,
+								message: 'Email is required',
+							},
+						]}
+					>
+						<Input />
+					</Form.Item>
+				</Form>
+			</Modal>
+		</>
+	);
+};
 
-	// <>
-	// 		<Form
-	// 			labelCol={{ span: 4 }}
-	// 			wrapperCol={{ span: 14 }}
-	// 			onSubmit={onSubmit}
-	// 			layout="inline"
-	// 			size="small"
-	// 		>
-	// 		</Form>
-	// 		<Form.Item label="Email">
-	// 			<Input type="email" name="email" value={user.email} onChange={handleInputChange}/>
-	// 		</Form.Item>
-	// 		<Form.Item label="First name">
-	// 			<Input type="email" name="email" value={user.first_name} onChange={handleInputChange}/>
-	// 		</Form.Item>
-	// 		<Form.Item label="Last name">
-	// 			<Input type="email" name="email" value={user.last_name} onChange={handleInputChange}/>
-	// 		</Form.Item>
-	//
-	// 		<Form.Item label="Button">
-	// 			<Button type="primary">Button</Button>
-	// 		</Form.Item>
-	// </>
-	)
+EditUser.propTypes = {
+	children: PropTypes.element,
+	user: PropTypes.object,
+	users: PropTypes.array,
+	setUsers: PropTypes.func,
 };
 
 export default EditUser;
