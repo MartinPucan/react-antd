@@ -86,7 +86,7 @@ const LoginUser = () => {
 			{isLoggedIn ? (
 				<>
 					<h1>Welcome {username}!</h1>
-					<button onClick={() => dispatch({type: 'logout'})}>
+					<button onClick={() => dispatch({ type: 'logout' })}>
 						Log Out
 					</button>
 				</>
@@ -145,7 +145,6 @@ const LoginUser = () => {
 						}
 					/>
 				</Form.Item>
-
 				<Form.Item {...tailLayout}>
 					<Button
 						type="primary"

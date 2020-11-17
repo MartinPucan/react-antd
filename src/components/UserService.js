@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 export const useUsers = () => {
 	const [users, setUsers] = useState([]);
-
+  
 	const fetchUsers = async () => {
 		try {
 			const response = await fetch(`https://reqres.in/api/users?page=2`);
